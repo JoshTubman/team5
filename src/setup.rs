@@ -3,7 +3,7 @@
 //! Every function below is a skeleton: it compiles and returns a harmless default so the
 //! other parts can build against it. Replace the body with your own code. Keep the
 //! signature unless your team and instructor agree to change it.
-
+use crate::io;
 use crate::types::{GameOver, GameState};
 
 /// Prints the skill menu, reads the choice with `io::ask_number`, and returns it.
@@ -17,18 +17,114 @@ pub fn get_shooting_skill_level() -> f64 {
 /// Runs the whole initial-purchase sequence and returns the starting `GameState`.
 ///
 /// Skeleton returns a generic, plausible starting state so other parts can be tested.
+
 pub fn purchase_supplies(skill_level: f64) -> GameState {
-    GameState {
-        food: 200.0,
-        bullets: 1000.0,
-        clothing: 50.0,
-        misc_supplies: 50.0,
-        cash: 100.0,
-        oxen_spend: 250.0,
-        skill_level,
-        ..GameState::default()
+    loop {
+        // Purchase oxen
+        let oxen_spend = loop {
+            let amount = io::ask_number(
+                "HOW MUCH DO YOU WANT TO SPEND ON YOUR OXEN TEAM"
+            );
+
+            if amount < 200.0 {
+                println!("NOT ENOUGH");
+            } else if amount > 300.0 {
+                println!("TOO MUCH");
+            } else {
+                break amount;
+            }
+        };
+
+        // Purchase food
+        let food = loop {
+            let amount = io::ask_number(
+                "HOW MUCH DO YOU WANT TO SPEND ON FOOD"
+            );
+
+            if amount < 0.0 {
+                println!("IMPOSSIBLE");
+            } else {
+                break amount;
+            }
+        };
+
+        // Purchase ammunition
+        let ammunition = loop {
+            let amount = io::ask_number(
+                "HOW MUCH DO YOU WANT TO SPEND ON AMMUNITION"
+            );
+
+            if amount < 0.0 {
+                println!("IMPOSSIBLE");
+            } else {
+                break amount;
+            }
+        };
+
+        // Purchase clothing
+        let clothing = loop {
+            let amount = io::ask_number(
+                "HOW MUCH DO YOU WANT TO SPEND ON CLOTHING"
+            );
+
+            if amount < 0.0 {
+                println!("IMPOSSIBLE");
+            } else {
+                break amount;
+            }
+        };
+
+        // Purchase miscellaneous supplies
+        let misc_supplies = loop {
+            let amount = io::ask_number(
+                "HOW MUCH DO YOU WANT TO SPEND ON MISCELLANEOUS SUPPLIES"
+            );
+
+            if amount < 0.0 {
+                println!("IMPOSSIBLE");
+            } else {
+                break amount;
+            }
+        };
+
+        // Calculate total spending
+        let total = oxen_spend + food + ammunition
+            + clothing + misc_supplies;
+
+        // Restart if the player overspends
+        if total > 700.0 {
+            println!(
+                "YOU OVERSPENT--YOU ONLY HAD $700 TO SPEND. BUY AGAIN"
+            );
+            continue;
+        }
+
+        // remaining cash
+        let cash = 700.0 - total;
+
+        // Convert ammo dollars into bullets
+        let bullets = ammunition * 50.0;
+
+        println!(
+            "AFTER ALL YOUR PURCHASES, YOU NOW HAVE {} DOLLARS LEFT",
+            io::fmt_num(cash)
+        );
+
+        println!("MONDAY MARCH 29 1847");
+
+        return GameState {
+            food,
+            bullets,
+            clothing,
+            misc_supplies,
+            cash,
+            oxen_spend,
+            skill_level,
+            ..GameState::default()
+        };
     }
 }
+
 
 /// Advances to the next turn and prints its date. Returns `Err(GameOver::TrailTooLong)`
 /// when the trip runs past the last date in the table.
