@@ -130,9 +130,46 @@ pub fn purchase_supplies(skill_level: f64) -> GameState {
 /// when the trip runs past the last date in the table.
 ///
 /// Skeleton does nothing and returns `Ok(())`.
+
 pub fn advance_turn_date(state: &mut GameState) -> Result<(), GameOver> {
+    let dates = [
+        "APRIL 12",
+        "APRIL 26",
+        "MAY 10",
+        "MAY 24",
+        "JUNE 7",
+        "JUNE 21",
+        "JULY 5",
+        "JULY 19",
+        "AUGUST 2",
+        "AUGUST 16",
+        "AUGUST 30",
+        "SEPTEMBER 13",
+        "SEPTEMBER 27",
+        "OCTOBER 11",
+        "OCTOBER 25",
+        "NOVEMBER 8",
+        "NOVEMBER 22",
+        "DECEMBER 6",
+        "DECEMBER 20",
+    ];
+
+    state.turn_number += 1;
+
+    if state.turn_number >= 20  {
+        println!("YOU HAVE BEEN ON THE TRAIL TOO LONG ------");
+        println!("YOUR FAMILY DIES IN THE FIRST BLIZZARD OF WINTER");
+
+        return Err(GameOver::TrailTooLong);
+    }
+
+    let date = dates[(state.turn_number - 1) as usize];
+
+    println!("\nMONDAY {} 1847\n", date);
+
     Ok(())
 }
+
 
 /// Start-of-turn cleanup and the status table: clamp negatives, low-food warning, floor
 /// values, record `turn_start_mileage`, print mileage and the resource table.
