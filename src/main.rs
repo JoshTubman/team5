@@ -24,27 +24,15 @@ mod types;
 
 
 fn main() {
-    // Test turn 1
-    println!("--- TESTING TURN 1 ---");
-    let mut state = types::GameState::default();
+    println!("--- TESTING PURCHASE_SUPPLIES ---");
 
-    setup::advance_turn_date(&mut state);
+    let state = setup::purchase_supplies(3.0);
 
-    // Test turn 19
-    println!("--- TESTING TURN 19 ---");
-    state.turn_number = 18;
-
-    setup::advance_turn_date(&mut state);
-
-    // Test turn 20
-    println!("--- TESTING TURN 20 ---");
-    state.turn_number = 19;
-
-    match setup::advance_turn_date(&mut state) {
-        Ok(()) => println!("Unexpected: game continued."),
-        Err(types::GameOver::TrailTooLong) => {
-            println!("SUCCESS: Game ended because the player reached turn 20.");
-        }
-        Err(_) => println!("Unexpected game-over condition."),
-    }
+    println!("\n--- PURCHASE RESULTS ---");
+    println!("Oxen spending: {}", state.oxen_spend);
+    println!("Food: {}", state.food);
+    println!("Bullets: {}", state.bullets);
+    println!("Clothing: {}", state.clothing);
+    println!("Misc supplies: {}", state.misc_supplies);
+    println!("Remaining cash: {}", state.cash);
 }
